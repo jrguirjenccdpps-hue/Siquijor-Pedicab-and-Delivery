@@ -124,9 +124,6 @@
 </main>
 
 <script>
-const WEBAPP="https://script.google.com/macros/s/AKfycbzMbvnjjnBaHOqbrV7jXQc6WvEJqt5ZAsyONfcwJUJgVSNRSq_fJ3qjtYzyUdDFnJ_gHA/exec";
-const API_SECRET="siquijor@2025";
-
 function hideAll(){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));}
 document.getElementById('openRideBtn').onclick=()=>{hideAll();document.getElementById('ridePanel').classList.add('active');};
 document.getElementById('openDeliveryBtn').onclick=()=>{hideAll();document.getElementById('deliveryPanel').classList.add('active');};
@@ -142,70 +139,57 @@ document.getElementById('ride_muni').onchange=function(){
 }
 document.getElementById('ride_muni').dispatchEvent(new Event('change'));
 
-// POST helper
-async function postJSON(payload){
-  payload.secretKey=API_SECRET;
-  try{
-    const resp=await fetch(WEBAPP,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
-    return await resp.json();
-  }catch(e){return {status:'error',message:e.message}}
-}
-
 // Ride submit
-document.getElementById('rideSubmit').onclick=async()=>{
-  const payload={
-    requestType:'ride',
-    customerName:document.getElementById('ride_name').value,
-    contactNumber:document.getElementById('ride_contact').value,
-    municipality:document.getElementById('ride_muni').value,
-    pickupLocation:document.getElementById('ride_pickup').value,
-    dropoffLocation:document.getElementById('ride_dropoff').value,
-    passengers:document.getElementById('ride_passengers').value,
-    note:document.getElementById('ride_note').value
+document.getElementById('rideSubmit').onclick=()=> {
+  const data = {
+    customerName: document.getElementById('ride_name').value,
+    contactNumber: document.getElementById('ride_contact').value,
+    municipality: document.getElementById('ride_muni').value,
+    pickupLocation: document.getElementById('ride_pickup').value,
+    dropoffLocation: document.getElementById('ride_dropoff').value,
+    passengers: document.getElementById('ride_passengers').value,
+    note: document.getElementById('ride_note').value
   };
-  const res=await postJSON(payload);
-  const msg=document.getElementById('rideMsg'); 
-  msg.innerText=res.message; 
-  msg.className='msg '+(res.status==='success'?'success':'error');
+  google.script.run.withSuccessHandler(res=>{
+    const msg=document.getElementById('rideMsg'); 
+    msg.innerText=res.message; 
+    msg.className='msg '+(res.status==='success'?'success':'error');
+  }).submitRide(data);
 };
 
 // Delivery submit
-document.getElementById('delSubmit').onclick=async()=>{
-  const payload={
-    requestType:'delivery',
-    senderName:document.getElementById('del_sender').value,
-    senderContact:document.getElementById('del_sender_contact').value,
-    receiverName:document.getElementById('del_receiver').value,
-    receiverContact:document.getElementById('del_receiver_contact').value,
-    pickupMunicipality:document.getElementById('del_pick_muni').value,
-    pickupLocation:document.getElementById('del_pick_loc').value,
-    dropoffMunicipality:document.getElementById('del_drop_muni').value,
-    dropoffLocation:document.getElementById('del_drop_loc').value,
-    note:document.getElementById('del_note').value
+document.getElementById('delSubmit').onclick=()=>{
+  const data = {
+    senderName: document.getElementById('del_sender').value,
+    senderContact: document.getElementById('del_sender_contact').value,
+    receiverName: document.getElementById('del_receiver').value,
+    receiverContact: document.getElementById('del_receiver_contact').value,
+    pickupMunicipality: document.getElementById('del_pick_muni').value,
+    pickupLocation: document.getElementById('del_pick_loc').value,
+    dropoffMunicipality: document.getElementById('del_drop_muni').value,
+    dropoffLocation: document.getElementById('del_drop_loc').value,
+    note: document.getElementById('del_note').value
   };
-  const res=await postJSON(payload);
-  const msg=document.getElementById('delMsg'); 
-  msg.innerText=res.message; 
-  msg.className='msg '+(res.status==='success'?'success':'error');
+  google.script.run.withSuccessHandler(res=>{
+    const msg=document.getElementById('delMsg'); 
+    msg.innerText=res.message; 
+    msg.className='msg '+(res.status==='success'?'success':'error');
+  }).submitDelivery(data);
 };
 
 // Feedback submit
-document.getElementById('fbSubmit').onclick=async()=>{
-  const payload={
-    requestType:'feedback',
-    name:document.getElementById('fb_name').value,
-    contact:document.getElementById('fb_contact').value,
-    message:document.getElementById('fb_message').value,
-    rating:document.getElementById('fb_rating').value
+document.getElementById('fbSubmit').onclick=()=>{
+  const data = {
+    name: document.getElementById('fb_name').value,
+    contact: document.getElementById('fb_contact').value,
+    message: document.getElementById('fb_message').value,
+    rating: document.getElementById('fb_rating').value
   };
-  const res=await postJSON(payload);
-  const msg=document.getElementById('fbMsg'); 
-  msg.innerText=res.message; 
-  msg.className='msg '+(res.status==='success'?'success':'error');
+  google.script.run.withSuccessHandler(res=>{
+    const msg=document.getElementById('fbMsg'); 
+    msg.innerText=res.message; 
+    msg.className='msg '+(res.status==='success'?'success':'error');
+  }).submitFeedback(data);
 };
 
 // Tip
