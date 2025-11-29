@@ -16,8 +16,6 @@
   .feedback{background:#eee;color:#234;border:1px solid #ccc;}
   .panel{display:none;padding-top:12px;}
   .panel.active{display:block;}
-  .row{display:flex;gap:8px}
-  .col{flex:1}
   input,select,textarea{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
   .btn{padding:10px 12px;border:none;border-radius:8px;cursor:pointer;margin-top:8px;}
   .btn.primary{background:#2e7d32;color:#fff;}
@@ -126,18 +124,16 @@
 </main>
 
 <script>
-const WEBAPP="https://script.google.com/macros/s/AKfycbyNMIArHSnjLN8tRi1NMDJzC-ctWECEGREGtwltm3kBVyAd2UCiwCCsJcFKl-AKRe6bBw/exec"; // Replace with your Apps Script web app URL
+const WEBAPP="https://script.google.com/macros/s/AKfycbzMbvnjjnBaHOqbrV7jXQc6WvEJqt5ZAsyONfcwJUJgVSNRSq_fJ3qjtYzyUdDFnJ_gHA/exec";
 const API_SECRET="siquijor@2025";
 
-function hideAll(){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-}
+function hideAll(){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));}
 document.getElementById('openRideBtn').onclick=()=>{hideAll();document.getElementById('ridePanel').classList.add('active');};
 document.getElementById('openDeliveryBtn').onclick=()=>{hideAll();document.getElementById('deliveryPanel').classList.add('active');};
 document.getElementById('openTipBtn').onclick=()=>{hideAll();document.getElementById('tipPanel').classList.add('active');};
 document.getElementById('openFeedbackBtn').onclick=()=>{hideAll();document.getElementById('feedbackPanel').classList.add('active');};
 
-// Fare calc
+// Fare calculation
 document.getElementById('ride_muni').onchange=function(){
   let fare='—';
   if(this.value==='Siquijor, Siquijor') fare='₱150';
@@ -172,8 +168,10 @@ document.getElementById('rideSubmit').onclick=async()=>{
     note:document.getElementById('ride_note').value
   };
   const res=await postJSON(payload);
-  const msg=document.getElementById('rideMsg'); msg.innerText=res.message; msg.className='msg '+(res.status==='success'?'success':'error');
-}
+  const msg=document.getElementById('rideMsg'); 
+  msg.innerText=res.message; 
+  msg.className='msg '+(res.status==='success'?'success':'error');
+};
 
 // Delivery submit
 document.getElementById('delSubmit').onclick=async()=>{
@@ -190,8 +188,10 @@ document.getElementById('delSubmit').onclick=async()=>{
     note:document.getElementById('del_note').value
   };
   const res=await postJSON(payload);
-  const msg=document.getElementById('delMsg'); msg.innerText=res.message; msg.className='msg '+(res.status==='success'?'success':'error');
-}
+  const msg=document.getElementById('delMsg'); 
+  msg.innerText=res.message; 
+  msg.className='msg '+(res.status==='success'?'success':'error');
+};
 
 // Feedback submit
 document.getElementById('fbSubmit').onclick=async()=>{
@@ -203,8 +203,10 @@ document.getElementById('fbSubmit').onclick=async()=>{
     rating:document.getElementById('fb_rating').value
   };
   const res=await postJSON(payload);
-  const msg=document.getElementById('fbMsg'); msg.innerText=res.message; msg.className='msg '+(res.status==='success'?'success':'error');
-}
+  const msg=document.getElementById('fbMsg'); 
+  msg.innerText=res.message; 
+  msg.className='msg '+(res.status==='success'?'success':'error');
+};
 
 // Tip
 function copyNumber(num){navigator.clipboard.writeText(num); alert('Copied: '+num);}
