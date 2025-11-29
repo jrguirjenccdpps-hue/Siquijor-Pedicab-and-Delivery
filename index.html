@@ -3,311 +3,211 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Siquijor Delivery and Pedicab — Local rides & deliveries made simple</title>
-<meta name="description" content="Siquijor Delivery and Pedicab — Request rides, send deliveries, tip drivers, and give feedback. Service area: Siquijor & San Juan, Siquijor." />
+<title>Siquijor Delivery & Pedicab</title>
 <style>
-  :root{
-    --accent:#2e7d32; --accent-dark:#1f5f20; --muted:#556; --bg:#f4fbf7; --card:#fff;
-    --glass: rgba(255,255,255,0.85);
-    --radius:14px;
-    --maxw:920px;
-  }
-  *{box-sizing:border-box}
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:linear-gradient(180deg,#eef9ef, #f7fbf8); color:#123; -webkit-font-smoothing:antialiased;}
-  .stage{max-width:var(--maxw);margin:18px auto;padding:12px;}
-  .card{background:var(--card);border-radius:var(--radius);box-shadow:0 10px 28px rgba(15,30,15,0.06);overflow:hidden;}
-  .hero{padding:20px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;}
-  .logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(180deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px}
-  h1{margin:0;font-size:2.6rem;color:var(--accent);text-align:center;}
-  p.tag{margin:0;color:var(--muted);font-weight:600;font-size:1rem}
-  .info-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px; justify-content:center}
-  .chip{background:#f1fff6;padding:6px 10px;border-radius:999px;font-weight:700;color:#236;font-size:0.85rem}
-  .menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px}
-  .menu-button{background:var(--glass);border-radius:12px;padding:16px;text-align:center;font-weight:800;cursor:pointer;border:1px solid rgba(0,0,0,0.03);box-shadow:0 6px 18px rgba(10,10,10,0.04)}
-  .menu-button .emoji{font-size:20px;display:block;margin-bottom:8px}
-  .menu-button.primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff}
-  .menu-button.tip{background:linear-gradient(90deg,#ff8a00,#ff5e00);color:#fff}
-  .menu-button.feedback{background:#fff;color:#234;border:1px solid #eee}
-  .panels{position:relative;height:calc(100vh - 220px);overflow:hidden}
-  .panel{position:absolute;inset:0;background:var(--card);transform:translateX(100%);transition:transform 380ms cubic-bezier(.2,.9,.2,1);overflow:auto;padding:18px}
-  .panel.active{transform:translateX(0%)}
-  .panel.left{transform:translateX(-100%)}
-  .panel.headerless{padding-top:8px}
-  .panel .back{background:none;border:0;color:var(--muted);font-weight:700;cursor:pointer;margin-bottom:8px}
-  .panel h2{margin:4px 0 8px 0;color:var(--accent)}
-  label{display:block;font-weight:700;margin-top:12px}
-  input[type="text"], input[type="tel"], input[type="number"], textarea, select, input[type="datetime-local"]{width:100%;padding:10px;margin-top:6px;border-radius:10px;border:1px solid #e6eef0;font-size:15px;}
-  textarea{min-height:90px;resize:vertical}
+  :root{--accent:#2e7d32;--bg:#f4fbf7;--card:#fff;--radius:12px;}
+  body{font-family:Arial,sans-serif;margin:0;background:var(--bg);}
+  .stage{max-width:920px;margin:18px auto;padding:12px;}
+  .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+  .menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+  .menu-button{padding:14px;border-radius:12px;text-align:center;font-weight:700;cursor:pointer;}
+  .primary{background:#2e7d32;color:#fff;}
+  .tip{background:#ff8a00;color:#fff;}
+  .feedback{background:#eee;color:#234;border:1px solid #ccc;}
+  .panel{display:none;padding-top:12px;}
+  .panel.active{display:block;}
   .row{display:flex;gap:8px}
   .col{flex:1}
-  .btn{display:inline-block;padding:12px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:800}
-  .btn.primary{background:var(--accent);color:#fff}
-  .btn.secondary{background:#f1f1f1;color:#222}
-  .small{font-size:0.88rem;color:var(--muted);margin-top:8px}
-  .farebox{background:#f0fff4;padding:12px;border-radius:10px;border-left:4px solid var(--accent);margin-top:12px;font-weight:800;color:#146032;text-align:center}
-  .tip-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .tip-grid button{flex:1}
-  .msg{margin-top:12px;padding:10px;border-radius:8px}
-  .success{background:#e8fbef;border-left:4px solid #2e7d32}
-  .error{background:#fff0f0;border-left:4px solid #d32}
-  footer{padding:12px;text-align:center;color:#6a8b72;font-size:0.9rem}
-  @media (max-width:720px){.menu{grid-template-columns:1fr}.panels{height:calc(100vh - 360px)}}
+  input,select,textarea{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
+  .btn{padding:10px 12px;border:none;border-radius:8px;cursor:pointer;margin-top:8px;}
+  .btn.primary{background:#2e7d32;color:#fff;}
+  .btn.secondary{background:#ccc;color:#222;}
+  .msg{margin-top:10px;padding:8px;border-radius:6px;}
+  .success{background:#e8fbef;border-left:4px solid #2e7d32;}
+  .error{background:#fff0f0;border-left:4px solid #d32;}
 </style>
 </head>
 <body>
 <main class="stage">
   <div class="card">
-    <div class="hero">
-      <div class="logo">SP</div>
-      <h1>Siquijor Delivery and Pedicab</h1>
-      <p class="tag">Local rides and Deliveries Made Simple</p>
-      <div class="info-chips">
-        <div class="chip">Service hours: 9:00 AM – 6:00 PM</div>
-        <div class="chip">Response: 5–10 minutes</div>
-        <div class="chip">Area: Siquijor & San Juan</div>
-      </div>
-    </div>
+    <h1>Siquijor Delivery & Pedicab</h1>
+    <p>Local rides & deliveries made simple</p>
 
     <div class="menu">
-      <div class="menu-button primary" id="openRideBtn"><span class="emoji">🚕</span>Request a Ride</div>
-      <div class="menu-button primary" id="openDeliveryBtn"><span class="emoji">📦</span>Send a Delivery</div>
-      <div class="menu-button tip" id="openTipBtn"><span class="emoji">💝</span>Give a Tip</div>
-      <div class="menu-button feedback" id="openFeedbackBtn"><span class="emoji">✉️</span>Suggestions & Feedback</div>
+      <div class="menu-button primary" id="openRideBtn">🚕 Ride</div>
+      <div class="menu-button primary" id="openDeliveryBtn">📦 Delivery</div>
+      <div class="menu-button tip" id="openTipBtn">💝 Tip</div>
+      <div class="menu-button feedback" id="openFeedbackBtn">✉ Feedback</div>
     </div>
 
-    <div class="panels" aria-live="polite">
-      <!-- Ride Panel -->
-      <section id="ridePanel" class="panel" aria-hidden="true">
-        <button class="back" id="backFromRide">← Back to menu</button>
-        <h2>Request a Ride</h2>
-        <p class="small">Service area: Siquijor, Siquijor & San Juan, Siquijor only.</p>
-
-        <form id="rideForm">
-          <label>Customer Name</label>
-          <input id="ride_name" type="text" required placeholder="Juan Dela Cruz">
-          <label>Contact Number</label>
-          <input id="ride_contact" type="tel" required placeholder="09XXXXXXXXX">
-          <div class="row">
-            <div class="col">
-              <label>Municipality</label>
-              <select id="ride_muni" required>
-                <option value="">Select</option>
-                <option value="Siquijor, Siquijor">Siquijor, Siquijor</option>
-                <option value="San Juan, Siquijor">San Juan, Siquijor</option>
-              </select>
-            </div>
-            <div class="col">
-              <label>Passengers</label>
-              <input id="ride_passengers" type="number" min="1" max="6" value="1">
-            </div>
-          </div>
-          <label>Pickup Location</label>
-          <input id="ride_pickup" type="text" required placeholder="e.g. Lazi Public Market">
-          <label>Drop-off Location</label>
-          <input id="ride_dropoff" type="text" required placeholder="e.g. Guiwanon Beach">
-          <label>Note (optional)</label>
-          <textarea id="ride_note" placeholder="Any special request"></textarea>
-          <div class="farebox" id="fareBox">Estimated Fare: —</div>
-          <div style="margin-top:12px;display:flex;gap:10px">
-            <button type="button" class="btn primary" id="rideSubmit">Send Ride Request</button>
-            <button type="button" class="btn secondary" id="rideClear">Clear</button>
-          </div>
-          <div id="rideMsg" class="msg" aria-live="polite"></div>
-        </form>
-      </section>
-
-      <!-- Delivery Panel -->
-      <section id="deliveryPanel" class="panel" aria-hidden="true">
-        <button class="back" id="backFromDelivery">← Back to menu</button>
-        <h2>Send a Delivery</h2>
-        <p class="small">We will contact sender & receiver to confirm pickup and delivery.</p>
-
-        <form id="deliveryForm">
-          <label>Sender Name</label>
-          <input id="del_sender" type="text" required placeholder="Maria Santos">
-          <label>Sender Contact Number</label>
-          <input id="del_sender_contact" type="tel" required placeholder="09XXXXXXXXX">
-          <label>Receiver Name</label>
-          <input id="del_receiver" type="text" required placeholder="Pedro Reyes">
-          <label>Receiver Contact Number</label>
-          <input id="del_receiver_contact" type="tel" required placeholder="09XXXXXXXXX">
-          <label>Pick up Municipality</label>
-          <select id="del_pick_muni" required>
-            <option value="">Select</option>
-            <option value="Siquijor, Siquijor">Siquijor, Siquijor</option>
-            <option value="San Juan, Siquijor">San Juan, Siquijor</option>
-          </select>
-          <label>Pick up Location (specific)</label>
-          <input id="del_pick_loc" type="text" required placeholder="e.g. Barangay Hall">
-          <label>Drop-off Municipality</label>
-          <select id="del_drop_muni" required>
-            <option value="">Select</option>
-            <option value="Siquijor, Siquijor">Siquijor, Siquijor</option>
-            <option value="San Juan, Siquijor">San Juan, Siquijor</option>
-          </select>
-          <label>Drop-off Location (specific)</label>
-          <input id="del_drop_loc" type="text" required placeholder="e.g. Beach Resort">
-          <label>Note (optional)</label>
-          <textarea id="del_note" placeholder="Any special instructions"></textarea>
-          <div style="margin-top:12px;display:flex;gap:10px">
-            <button type="button" class="btn primary" id="delSubmit">Send Delivery Request</button>
-            <button type="button" class="btn secondary" id="delClear">Clear</button>
-          </div>
-          <div id="delMsg" class="msg" aria-live="polite"></div>
-        </form>
-      </section>
-
-      <!-- Tip Panel -->
-      <section id="tipPanel" class="panel" aria-hidden="true">
-        <button class="back" id="backFromTip">← Back to menu</button>
-        <h2>Give a Tip</h2>
-        <p class="small">Support our pedicab drivers — thank you!</p>
-        <div style="margin-top:10px">
-          <h3>📲 GCash</h3>
-          <p><strong>Number:</strong> <span id="gcashNum">09652367470</span><br><strong>Name:</strong> Joshua Guirjen</p>
-          <div style="display:flex;gap:8px;margin-bottom:10px">
-            <button class="btn primary" onclick="copyNumber('09652367470')">📋 Copy Number</button>
-            <button class="btn secondary" onclick="openGCash()">Open GCash App</button>
-          </div>
-
-          <h3>🏦 PalawanPay</h3>
-          <p><strong>Number:</strong> <span id="palawanNum">09652367470</span></p>
-          <div style="display:flex;gap:8px;margin-bottom:10px">
-            <button class="btn primary" onclick="copyNumber('09652367470')">📋 Copy Number</button>
-          </div>
-
-          <h3>💰 Choose a Tip Amount</h3>
-          <div class="tip-grid">
-            <button class="btn primary" onclick="tipAmount('₱20')">₱20</button>
-            <button class="btn primary" onclick="tipAmount('₱50')">₱50</button>
-            <button class="btn primary" onclick="tipAmount('₱100')">₱100</button>
-          </div>
-          <div id="tipThanks" class="msg success" style="display:none">✅ Thank you! Please send your tip using the details above.</div>
-        </div>
-      </section>
-
-      <!-- Feedback Panel -->
-      <section id="feedbackPanel" class="panel" aria-hidden="true">
-        <button class="back" id="backFromFeedback">← Back to menu</button>
-        <h2>Suggestions & Feedback</h2>
-        <p class="small">Your feedback helps us improve. Name & contact optional.</p>
-        <form id="feedbackForm">
-          <label>Name (optional)</label>
-          <input id="fb_name" type="text" placeholder="Your name">
-          <label>Contact (optional)</label>
-          <input id="fb_contact" type="text" placeholder="Phone or email">
-          <label>Message</label>
-          <textarea id="fb_message" required placeholder="Tell us how we can improve"></textarea>
-          <label>Rating</label>
-          <select id="fb_rating">
-            <option value="">Select rating (optional)</option>
-            <option value="5">5 — Excellent</option>
-            <option value="4">4 — Good</option>
-            <option value="3">3 — Okay</option>
-            <option value="2">2 — Poor</option>
-            <option value="1">1 — Very poor</option>
-          </select>
-          <div style="margin-top:12px;display:flex;gap:10px">
-            <button type="button" class="btn primary" id="fbSubmit">Send Feedback</button>
-            <button type="button" class="btn secondary" id="fbClear">Clear</button>
-          </div>
-          <div id="fbMsg" class="msg" aria-live="polite"></div>
-        </form>
-      </section>
+    <!-- Ride Panel -->
+    <div id="ridePanel" class="panel">
+      <button onclick="hideAll()">← Back</button>
+      <h2>Request Ride</h2>
+      <form id="rideForm">
+        <input type="text" id="ride_name" placeholder="Name" required>
+        <input type="tel" id="ride_contact" placeholder="Contact" required>
+        <select id="ride_muni" required>
+          <option value="">Select Municipality</option>
+          <option value="Siquijor, Siquijor">Siquijor, Siquijor</option>
+          <option value="San Juan, Siquijor">San Juan, Siquijor</option>
+        </select>
+        <input type="text" id="ride_pickup" placeholder="Pickup" required>
+        <input type="text" id="ride_dropoff" placeholder="Dropoff" required>
+        <input type="number" id="ride_passengers" min="1" max="6" value="1">
+        <textarea id="ride_note" placeholder="Note (optional)"></textarea>
+        <div id="fareBox">Estimated Fare: —</div>
+        <button type="button" class="btn primary" id="rideSubmit">Send</button>
+        <button type="button" class="btn secondary" onclick="rideForm.reset()">Clear</button>
+        <div id="rideMsg" class="msg"></div>
+      </form>
     </div>
 
-    <footer>
-      🔒 Your information is used only for booking and will not be shared. For urgent bookings call your local number.
-    </footer>
+    <!-- Delivery Panel -->
+    <div id="deliveryPanel" class="panel">
+      <button onclick="hideAll()">← Back</button>
+      <h2>Send Delivery</h2>
+      <form id="deliveryForm">
+        <input type="text" id="del_sender" placeholder="Sender" required>
+        <input type="tel" id="del_sender_contact" placeholder="Sender Contact" required>
+        <input type="text" id="del_receiver" placeholder="Receiver" required>
+        <input type="tel" id="del_receiver_contact" placeholder="Receiver Contact" required>
+        <select id="del_pick_muni" required>
+          <option value="">Pickup Municipality</option>
+          <option value="Siquijor, Siquijor">Siquijor, Siquijor</option>
+          <option value="San Juan, Siquijor">San Juan, Siquijor</option>
+        </select>
+        <input type="text" id="del_pick_loc" placeholder="Pickup Location" required>
+        <select id="del_drop_muni" required>
+          <option value="">Dropoff Municipality</option>
+          <option value="Siquijor, Siquijor">Siquijor, Siquijor</option>
+          <option value="San Juan, Siquijor">San Juan, Siquijor</option>
+        </select>
+        <input type="text" id="del_drop_loc" placeholder="Dropoff Location" required>
+        <textarea id="del_note" placeholder="Note (optional)"></textarea>
+        <button type="button" class="btn primary" id="delSubmit">Send</button>
+        <button type="button" class="btn secondary" onclick="deliveryForm.reset()">Clear</button>
+        <div id="delMsg" class="msg"></div>
+      </form>
+    </div>
+
+    <!-- Tip Panel -->
+    <div id="tipPanel" class="panel">
+      <button onclick="hideAll()">← Back</button>
+      <h2>Give a Tip</h2>
+      <p>GCash: 09652367470</p>
+      <button class="btn primary" onclick="copyNumber('09652367470')">Copy Number</button>
+      <div id="tipThanks" class="msg success" style="display:none">✅ Thank you!</div>
+    </div>
+
+    <!-- Feedback Panel -->
+    <div id="feedbackPanel" class="panel">
+      <button onclick="hideAll()">← Back</button>
+      <h2>Feedback</h2>
+      <form id="feedbackForm">
+        <input type="text" id="fb_name" placeholder="Name (optional)">
+        <input type="text" id="fb_contact" placeholder="Contact (optional)">
+        <textarea id="fb_message" placeholder="Message" required></textarea>
+        <select id="fb_rating">
+          <option value="">Rating (optional)</option>
+          <option value="5">5 Excellent</option>
+          <option value="4">4 Good</option>
+          <option value="3">3 Okay</option>
+          <option value="2">2 Poor</option>
+          <option value="1">1 Very Poor</option>
+        </select>
+        <button type="button" class="btn primary" id="fbSubmit">Send</button>
+        <button type="button" class="btn secondary" onclick="feedbackForm.reset()">Clear</button>
+        <div id="fbMsg" class="msg"></div>
+      </form>
+    </div>
+
   </div>
 </main>
 
 <script>
-/* CONFIG */
-const WEBAPP = "https://script.google.com/macros/s/AKfycbz4lcV_Bs4_uJkfijwNVBuVXFojX6-NS4UjFivxtD6OkCat_6o5LrCzZklwhLHtu9Nj/exec";
-const API_SECRET = "siquijor@2025"; 
+const WEBAPP="https://script.google.com/macros/s/AKfycbyNMIArHSnjLN8tRi1NMDJzC-ctWECEGREGtwltm3kBVyAd2UCiwCCsJcFKl-AKRe6bBw/exec"; // Replace with your Apps Script web app URL
+const API_SECRET="siquijor@2025";
 
-/* PANEL NAVIGATION */
-const panels=[document.getElementById('ridePanel'),document.getElementById('deliveryPanel'),document.getElementById('tipPanel'),document.getElementById('feedbackPanel')];
-function hideAllPanels(){panels.forEach(p=>{p.classList.remove('active');p.setAttribute('aria-hidden','true');});}
-function openPanel(panel){hideAllPanels();panel.classList.add('active');panel.setAttribute('aria-hidden','false');window.scrollTo(0,0);}
-document.getElementById('openRideBtn').addEventListener('click',()=>openPanel(document.getElementById('ridePanel')));
-document.getElementById('openDeliveryBtn').addEventListener('click',()=>openPanel(document.getElementById('deliveryPanel')));
-document.getElementById('openTipBtn').addEventListener('click',()=>openPanel(document.getElementById('tipPanel')));
-document.getElementById('openFeedbackBtn').addEventListener('click',()=>openPanel(document.getElementById('feedbackPanel')));
-document.getElementById('backFromRide').addEventListener('click',hideAllPanels);
-document.getElementById('backFromDelivery').addEventListener('click',hideAllPanels);
-document.getElementById('backFromTip').addEventListener('click',hideAllPanels);
-document.getElementById('backFromFeedback').addEventListener('click',hideAllPanels);
+function hideAll(){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+}
+document.getElementById('openRideBtn').onclick=()=>{hideAll();document.getElementById('ridePanel').classList.add('active');};
+document.getElementById('openDeliveryBtn').onclick=()=>{hideAll();document.getElementById('deliveryPanel').classList.add('active');};
+document.getElementById('openTipBtn').onclick=()=>{hideAll();document.getElementById('tipPanel').classList.add('active');};
+document.getElementById('openFeedbackBtn').onclick=()=>{hideAll();document.getElementById('feedbackPanel').classList.add('active');};
 
-/* FARE CALC */
-const fareBox=document.getElementById('fareBox');
-document.getElementById('ride_muni').addEventListener('change', function(){
+// Fare calc
+document.getElementById('ride_muni').onchange=function(){
   let fare='—';
   if(this.value==='Siquijor, Siquijor') fare='₱150';
   if(this.value==='San Juan, Siquijor') fare='₱300';
-  fareBox.innerText='Estimated Fare: '+fare;
-});
+  document.getElementById('fareBox').innerText='Estimated Fare: '+fare;
+}
 document.getElementById('ride_muni').dispatchEvent(new Event('change'));
 
-/* HELPER POST JSON */
+// POST helper
 async function postJSON(payload){
   payload.secretKey=API_SECRET;
   try{
-    const resp=await fetch(WEBAPP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const resp=await fetch(WEBAPP,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
     return await resp.json();
   }catch(e){return {status:'error',message:e.message}}
 }
 
-/* FORM SUBMISSIONS */
-document.getElementById('rideSubmit').addEventListener('click',async()=>{
-  const name=document.getElementById('ride_name').value;
-  const contact=document.getElementById('ride_contact').value;
-  const muni=document.getElementById('ride_muni').value;
-  const pickup=document.getElementById('ride_pickup').value;
-  const dropoff=document.getElementById('ride_dropoff').value;
-  const passengers=document.getElementById('ride_passengers').value;
-  const note=document.getElementById('ride_note').value;
-  const payload={requestType:'ride',customerName:name,contactNumber:contact,municipality:muni,pickupLocation:pickup,dropoffLocation:dropoff,passengers,note};
+// Ride submit
+document.getElementById('rideSubmit').onclick=async()=>{
+  const payload={
+    requestType:'ride',
+    customerName:document.getElementById('ride_name').value,
+    contactNumber:document.getElementById('ride_contact').value,
+    municipality:document.getElementById('ride_muni').value,
+    pickupLocation:document.getElementById('ride_pickup').value,
+    dropoffLocation:document.getElementById('ride_dropoff').value,
+    passengers:document.getElementById('ride_passengers').value,
+    note:document.getElementById('ride_note').value
+  };
   const res=await postJSON(payload);
-  const msg=document.getElementById('rideMsg');msg.innerText=res.message;msg.className='msg '+(res.status==='success'?'success':'error');
-});
+  const msg=document.getElementById('rideMsg'); msg.innerText=res.message; msg.className='msg '+(res.status==='success'?'success':'error');
+}
 
-document.getElementById('delSubmit').addEventListener('click',async()=>{
-  const sender=document.getElementById('del_sender').value;
-  const senderContact=document.getElementById('del_sender_contact').value;
-  const receiver=document.getElementById('del_receiver').value;
-  const receiverContact=document.getElementById('del_receiver_contact').value;
-  const pickMuni=document.getElementById('del_pick_muni').value;
-  const pickLoc=document.getElementById('del_pick_loc').value;
-  const dropMuni=document.getElementById('del_drop_muni').value;
-  const dropLoc=document.getElementById('del_drop_loc').value;
-  const note=document.getElementById('del_note').value;
-  const payload={requestType:'delivery',senderName:sender,senderContact:senderContact,receiverName:receiver,receiverContact:receiverContact,pickupMunicipality:pickMuni,pickupLocation:pickLoc,dropoffMunicipality:dropMuni,dropoffLocation:dropLoc,note};
+// Delivery submit
+document.getElementById('delSubmit').onclick=async()=>{
+  const payload={
+    requestType:'delivery',
+    senderName:document.getElementById('del_sender').value,
+    senderContact:document.getElementById('del_sender_contact').value,
+    receiverName:document.getElementById('del_receiver').value,
+    receiverContact:document.getElementById('del_receiver_contact').value,
+    pickupMunicipality:document.getElementById('del_pick_muni').value,
+    pickupLocation:document.getElementById('del_pick_loc').value,
+    dropoffMunicipality:document.getElementById('del_drop_muni').value,
+    dropoffLocation:document.getElementById('del_drop_loc').value,
+    note:document.getElementById('del_note').value
+  };
   const res=await postJSON(payload);
-  const msg=document.getElementById('delMsg');msg.innerText=res.message;msg.className='msg '+(res.status==='success'?'success':'error');
-});
+  const msg=document.getElementById('delMsg'); msg.innerText=res.message; msg.className='msg '+(res.status==='success'?'success':'error');
+}
 
-document.getElementById('fbSubmit').addEventListener('click',async()=>{
-  const name=document.getElementById('fb_name').value;
-  const contact=document.getElementById('fb_contact').value;
-  const message=document.getElementById('fb_message').value;
-  const rating=document.getElementById('fb_rating').value;
-  const payload={requestType:'feedback',name,contact,message,rating};
+// Feedback submit
+document.getElementById('fbSubmit').onclick=async()=>{
+  const payload={
+    requestType:'feedback',
+    name:document.getElementById('fb_name').value,
+    contact:document.getElementById('fb_contact').value,
+    message:document.getElementById('fb_message').value,
+    rating:document.getElementById('fb_rating').value
+  };
   const res=await postJSON(payload);
-  const msg=document.getElementById('fbMsg');msg.innerText=res.message;msg.className='msg '+(res.status==='success'?'success':'error');
-});
+  const msg=document.getElementById('fbMsg'); msg.innerText=res.message; msg.className='msg '+(res.status==='success'?'success':'error');
+}
 
-/* CLEAR BUTTONS */
-document.getElementById('rideClear').addEventListener('click',()=>document.getElementById('rideForm').reset());
-document.getElementById('delClear').addEventListener('click',()=>document.getElementById('deliveryForm').reset());
-document.getElementById('fbClear').addEventListener('click',()=>document.getElementById('feedbackForm').reset());
-
-/* TIP FUNCTIONS */
-function copyNumber(num){navigator.clipboard.writeText(num);alert('Copied: '+num);}
-function openGCash(){window.open('https://www.gcash.com/', '_blank');}
-function tipAmount(val){document.getElementById('tipThanks').style.display='block';}
+// Tip
+function copyNumber(num){navigator.clipboard.writeText(num); alert('Copied: '+num);}
 </script>
 </body>
 </html>
-
