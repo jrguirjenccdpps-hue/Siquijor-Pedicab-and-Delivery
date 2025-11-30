@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Siquijor Delivery & Pedicab</title>
+<title>Siquijor Delivery & Pedicab V5</title>
 <style>
   :root{--accent:#2e7d32;--bg:#f4fbf7;--card:#fff;--radius:12px;}
   body{font-family:Arial,sans-serif;margin:0;background:var(--bg);}
@@ -127,7 +127,6 @@
 const WEBAPP="https://script.google.com/macros/s/AKfycbzMbvnjjnBaHOqbrV7jXQc6WvEJqt5ZAsyONfcwJUJgVSNRSq_fJ3qjtYzyUdDFnJ_gHA/exec";
 const API_SECRET="siquijor@2025";
 
-// Panel toggle
 function hideAll(){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));}
 document.getElementById('openRideBtn').onclick=()=>{hideAll();document.getElementById('ridePanel').classList.add('active');};
 document.getElementById('openDeliveryBtn').onclick=()=>{hideAll();document.getElementById('deliveryPanel').classList.add('active');};
@@ -140,20 +139,20 @@ document.getElementById('ride_muni').onchange=function(){
   if(this.value==='Siquijor, Siquijor') fare='₱150';
   if(this.value==='San Juan, Siquijor') fare='₱300';
   document.getElementById('fareBox').innerText='Estimated Fare: '+fare;
-};
+}
 document.getElementById('ride_muni').dispatchEvent(new Event('change'));
 
 // POST helper
 async function postJSON(payload){
-  payload.secretKey = API_SECRET;
+  payload.secretKey=API_SECRET;
   try{
-    const resp = await fetch(WEBAPP,{
+    const resp=await fetch(WEBAPP,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(payload)
     });
     return await resp.json();
-  }catch(e){return {status:'error', message:e.message};}
+  }catch(e){return {status:'error',message:e.message}}
 }
 
 // Ride submit
@@ -169,8 +168,8 @@ document.getElementById('rideSubmit').onclick=async()=>{
     note:document.getElementById('ride_note').value
   };
   const res=await postJSON(payload);
-  const msg=document.getElementById('rideMsg'); 
-  msg.innerText=res.message; 
+  const msg=document.getElementById('rideMsg');
+  msg.innerText=res.message;
   msg.className='msg '+(res.status==='success'?'success':'error');
 };
 
@@ -189,8 +188,8 @@ document.getElementById('delSubmit').onclick=async()=>{
     note:document.getElementById('del_note').value
   };
   const res=await postJSON(payload);
-  const msg=document.getElementById('delMsg'); 
-  msg.innerText=res.message; 
+  const msg=document.getElementById('delMsg');
+  msg.innerText=res.message;
   msg.className='msg '+(res.status==='success'?'success':'error');
 };
 
@@ -204,12 +203,12 @@ document.getElementById('fbSubmit').onclick=async()=>{
     rating:document.getElementById('fb_rating').value
   };
   const res=await postJSON(payload);
-  const msg=document.getElementById('fbMsg'); 
-  msg.innerText=res.message; 
+  const msg=document.getElementById('fbMsg');
+  msg.innerText=res.message;
   msg.className='msg '+(res.status==='success'?'success':'error');
 };
 
-// Tip copy
+// Tip
 function copyNumber(num){navigator.clipboard.writeText(num); alert('Copied: '+num);}
 </script>
 </body>
