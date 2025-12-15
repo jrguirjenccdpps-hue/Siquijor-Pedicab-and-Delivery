@@ -5,32 +5,179 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Siquijor Pedicab and Deliveries</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<style>
-  body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
-  header { text-align:center; padding:30px 20px; background:linear-gradient(90deg,#2e7d32,#81c784); color:white; }
-  header h1 { font-size:2.8em; margin:0; }
-  header h2 { font-size:1.2em; margin-top:5px; font-style:italic; }
 
-  .container { display:flex; flex-direction:column; align-items:center; margin-top:40px; }
-  .btn { display:flex; align-items:center; justify-content:center; width:250px; padding:15px; margin:10px 0; font-size:18px; border:none; border-radius:12px; cursor:pointer; transition:0.3s; color:white; }
+<style>
+  body {
+    font-family: Arial;
+    background:#f7f7f7;
+    margin:0;
+    padding:0;
+    overflow:hidden; /* lock scroll until accepted */
+  }
+
+  header {
+    text-align:center;
+    padding:30px 20px;
+    background:linear-gradient(90deg,#2e7d32,#81c784);
+    color:white;
+  }
+
+  header h1 {
+    font-size:2.6em;
+    margin:0;
+  }
+
+  header h2 {
+    font-size:1.2em;
+    margin-top:6px;
+    font-style:italic;
+  }
+
+  .container {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:40px;
+  }
+
+  .btn {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:260px;
+    padding:15px;
+    margin:10px 0;
+    font-size:18px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    transition:0.3s;
+    color:white;
+  }
+
   .btn i { margin-right:10px; font-size:20px; }
+
   .pedicab { background:#2e7d32; }
   .feedback { background:#1976d2; }
   .delivery { background:#f57c00; }
   .van { background:#6a1b9a; }
   .tip { background:#ff4081; }
 
-  .btn:hover { transform:translateY(-5px); opacity:0.9; }
+  .btn:hover {
+    transform:translateY(-5px);
+    opacity:0.9;
+  }
 
-  .info { text-align:center; margin-top:50px; font-size:0.95em; color:#555; }
-  .tip-popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:25px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.2); max-width:400px; text-align:center; z-index:1000; }
-  .tip-popup h3 { margin-top:0; color:#2e7d32; }
-  .tip-popup p { font-style:italic; margin:15px 0; }
-  .tip-popup button { padding:10px 15px; border:none; border-radius:8px; background:#2e7d32; color:white; cursor:pointer; margin-top:10px; }
-  .overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:500; }
+  .info {
+    text-align:center;
+    margin:50px 10px 30px;
+    font-size:0.95em;
+    color:#555;
+  }
+
+  /* INTRO NOTICE OVERLAY */
+  .intro-overlay {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+    z-index:2000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:fadeIn 0.5s ease;
+  }
+
+  .intro-box {
+    background:#fff;
+    max-width:420px;
+    margin:20px;
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 8px 30px rgba(0,0,0,0.3);
+    animation:slideUp 0.5s ease;
+  }
+
+  .intro-box h3 {
+    color:#e65100;
+    margin-top:0;
+  }
+
+  .intro-box p {
+    font-size:1em;
+    font-weight:600;
+    margin:10px 0;
+  }
+
+  .intro-box button {
+    margin-top:18px;
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:#2e7d32;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    width:100%;
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+  }
+
+  @keyframes slideUp {
+    from { transform:translateY(30px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
+  }
+
+  /* TIP POPUP */
+  .overlay {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:500;
+  }
+
+  .tip-popup {
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#fff;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 6px 25px rgba(0,0,0,0.25);
+    max-width:400px;
+    text-align:center;
+    z-index:1000;
+  }
+
+  .tip-popup h3 { color:#2e7d32; }
 </style>
 </head>
+
 <body>
+
+<!-- INTRO NOTICE -->
+<div class="intro-overlay" id="intro">
+  <div class="intro-box">
+    <h3>⚠️ Important Notice</h3>
+    <p>🚲 Pedicab service is available only for:</p>
+    <p>✔️ Siquijor Port ➜ Destination</p>
+    <p>✔️ Destination ➜ Siquijor Port</p>
+    <p>❌ Other routes are currently not available</p>
+    <button onclick="acceptNotice()">I Understand</button>
+  </div>
+</div>
 
 <header>
   <h1>Siquijor Pedicab and Deliveries</h1>
@@ -60,21 +207,27 @@
 </div>
 
 <div class="info">
-  <p>Customer Care Hotline: 09652367470</p>
-  <p>Email: siquijorpedicab@gmail.com</p>
-  <p>Created by: Joshua Guirjen</p>
+  <p>📞 Customer Care Hotline: <b>0965 236 7470</b></p>
+  <p>📧 siquijorpedicab@gmail.com</p>
+  <p>Created by: <b>Joshua Guirjen</b></p>
 </div>
 
 <div class="overlay" id="overlay"></div>
+
 <div class="tip-popup" id="tipPopup">
   <h3>Support Our Drivers ❤️</h3>
-  <p>"A small tip goes a long way to brighten someone's day!"</p>
-  <p>GCash: <b id="gcash">09652367470</b> <button onclick="copyNumber('09652367470')">Copy</button></p>
-  <p>PalawanPay: <b id="palawan">639652367470</b> <button onclick="copyNumber('639652367470')">Copy</button></p>
+  <p>"A small tip goes a long way to brighten someone's day."</p>
+  <p>GCash: <b>09652367470</b></p>
+  <p>PalawanPay: <b>639652367470</b></p>
   <button onclick="closeTip()">Close</button>
 </div>
 
 <script>
+function acceptNotice(){
+  document.getElementById('intro').style.display='none';
+  document.body.style.overflow='auto';
+}
+
 function openTip(){
   document.getElementById('overlay').style.display='block';
   document.getElementById('tipPopup').style.display='block';
@@ -84,14 +237,7 @@ function closeTip(){
   document.getElementById('overlay').style.display='none';
   document.getElementById('tipPopup').style.display='none';
 }
-
-function copyNumber(num){
-  navigator.clipboard.writeText(num);
-  alert('Copied: ' + num);
-}
 </script>
 
 </body>
 </html>
-
-
